@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +57,48 @@
 <body>
     <div class="container">
         <h2>Login</h2>
-        <form action="login.php" method="POST">
+        <?php
+        session_start();
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Database connection
+            $servername = "localhost"; // Change this to your database server
+            $username = "root"; // Change this to your database username
+            $password = ""; // Change this to your database password
+            $dbname = "tinder-clone"; // Change this to your database name
+
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Get username and password from form
+            $username = $_POST["username"];
+            $password = $_POST["password"];
+
+            // Query to check if user exists
+            $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+            $result = $conn->query($sql);
+
+            // Check if user exists
+            if ($result->num_rows > 0) {
+                // User exists, start session and redirect to dashboard or another page
+                $_SESSION["username"] = $username;
+                header("Location: ../home.php");
+                exit();
+            } else {
+                // User doesn't exist, display error message
+                echo "<p style='color: red;'>Invalid username or password.</p>";
+            }
+
+            // Close connection
+            $conn->close();
+        }
+        ?>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>

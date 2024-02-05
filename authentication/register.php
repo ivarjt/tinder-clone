@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,7 +56,42 @@
 <body>
     <div class="container">
         <h2>Register</h2>
-        <form action="register.php" method="POST">
+        <?php
+        // Check if the form is submitted
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Database connection
+            $servername = "localhost"; // Change this to your database server
+            $username = "root"; // Change this to your database username
+            $password = ""; // Change this to your database password
+            $dbname = "tinder-clone"; // Change this to your database name
+
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Prepare and bind parameters
+            $stmt = $conn->prepare("INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, 0)");
+            $stmt->bind_param("sss", $username, $email, $password);
+
+            // Set parameters and execute
+            $username = $_POST["username"];
+            $email = $_POST["email"];
+            $password = $_POST["password"];
+            $stmt->execute();
+
+            // Close statement and connection
+            $stmt->close();
+            $conn->close();
+
+            // Redirect to a success message
+            echo "<p>Registration successful!</p>";
+        }
+        ?>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
