@@ -1,3 +1,20 @@
+<?php
+// Start session
+session_start();
+
+// Check if logout is requested
+if (isset($_GET["logout"])) {
+    // Unset all session variables
+    $_SESSION = [];
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to login page
+    header("Location: authentication/login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,8 +66,17 @@
         <h1>Welcome to Tinder Clone</h1>
         <p>Find your perfect match!</p>
         <a href="#" class="btn btn-primary">Get Started</a>
-        <a href="#" class="btn btn-primary">Login</a>
-        <a href="#" class="btn btn-secondary">Register</a>
+        <?php
+        // Check if user is logged in
+        if (isset($_SESSION["username"])) {
+            // User is logged in, display logout button
+            echo '<a href="?logout" class="btn btn-primary">Logout</a>';
+        } else {
+            // User is not logged in, display login and register buttons
+            echo '<a href="authentication/login.php" class="btn btn-primary">Login</a>';
+            echo '<a href="authentication/register.php" class="btn btn-secondary">Register</a>';
+        }
+        ?>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
