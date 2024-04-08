@@ -1,6 +1,10 @@
 <?php
 include('../db.php'); // Include the database connection file
 
+// Initialize error variable
+$error = "";
+
+// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $email = $_POST['email'];
@@ -39,10 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: login.php");
         exit();
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $error = "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -51,46 +54,122 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for additional styling */
+        body {
+            background: linear-gradient(to bottom right, #ff8c00, #ff1493);
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 100px; /* Adjust margin as needed */
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: none;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .card-body {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        /* Button animation */
+        .btn-register {
+            background-color: #ff8c00;
+            transition: background-color 0.5s ease;
+        }
+        .btn-register:hover {
+            background-color: #ff1493;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h2>Register</h2>
-        <form action="" method="post">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" name="email" required>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Register</h2>
+                    </div>
+                    <div class="card-body">
+                        <?php if(!empty($error)) { ?>
+                            <div class="alert alert-danger" role="alert">
+                                <?php echo $error; ?>
+                            </div>
+                        <?php } ?>
+                        <form action="" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="first_name">First Name:</label>
+                                        <input type="text" name="first_name" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="last_name">Last Name:</label>
+                                        <input type="text" name="last_name" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="email" name="email" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="password">Password:</label>
+                                        <input type="password" name="password" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="age">Age:</label>
+                                        <input type="number" name="age" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="gender">Gender:</label>
+                                        <select name="gender" class="form-control" required>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bio">Bio:</label>
+                                <textarea name="bio" class="form-control" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block btn-register">Register</button>
+                        </form>
+                        <p class="text-center">Already have an account? <a href="login.php">Login here</a>.</p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="first_name">First Name:</label>
-                <input type="text" name="first_name" required>
-            </div>
-            <div class="form-group">
-                <label for="last_name">Last Name:</label>
-                <input type="text" name="last_name" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="age">Age:</label>
-                <input type="number" name="age" required>
-            </div>
-            <div class="form-group">
-                <label for="bio">Bio:</label>
-                <textarea name="bio" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="gender">Gender:</label>
-                <select name="gender" required>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="login.php">Login here</a>.</p>
+        </div>
     </div>
 </body>
 </html>
