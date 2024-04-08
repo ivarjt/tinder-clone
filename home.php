@@ -25,6 +25,14 @@
     <a href="authentication/login.php">Login</a><br>
     <a href="authentication/logout.php">Logout</a><br>
     <a href="authentication/profile.php">Profile</a>
+    <hr>
+    <a href="match/match.php">Match</a><br>
+    <a href="match/friends.php">Friend List</a><br>
+    <hr>
+    <a href="home_page.php">New home</a>
+
+
+
 
 </body>
 </html>
