@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn->query($sql_insert_request);
     }
     // Redirect back to match.php or any other page
-    header("Location: match.php");
+    header("Location: ../home_page.php");
     exit();
 }
 ?>

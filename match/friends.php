@@ -2,6 +2,12 @@
 session_start();
 include('../db.php');
 
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
 $user_id = $_SESSION['user_id'];
 
 // Retrieve friends from friend_requests where status is 'accepted'
@@ -36,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_remove_friend = "DELETE FROM friend_requests WHERE (sender_id='$user_id' AND receiver_id='$friend_id') OR (sender_id='$friend_id' AND receiver_id='$user_id')";
         $conn->query($sql_remove_friend);
     }
-    // Redirect back to friend_requests.php or any other page
+    // Redirect back to friends.php or any other page
     header("Location: friends.php");
     exit();
 }
@@ -53,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css"> <!-- Include your custom CSS file -->
+    <link rel="stylesheet" href="../css/style.css"> <!-- Adjust the path as needed -->
 </head>
 <body>
     <div class="container">
