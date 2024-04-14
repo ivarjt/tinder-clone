@@ -22,7 +22,7 @@ if ($result_user_gender->num_rows == 1) {
     exit();
 }
 
-// Fetch users of the opposite gender with their age, excluding already friends
+// Fetch users of the opposite gender with their age, excluding already friends and blocked users
 $opposite_gender = ($user_gender == 1) ? 0 : 1; // Assuming 1 for male and 0 for female
 $sql_users_opposite_gender = "SELECT u.id, u.first_name, u.last_name, u.bio, u.profile_picture, u.age
                                FROM users u
@@ -35,7 +35,7 @@ $sql_users_opposite_gender = "SELECT u.id, u.first_name, u.last_name, u.bio, u.p
                                    END AS friend_id
                                    FROM friend_requests fr
                                    WHERE (fr.sender_id='$user_id' OR fr.receiver_id='$user_id')
-                                   AND fr.status='accepted'
+                                   AND (fr.status='accepted' OR fr.status='blocked')
                                )";
 $result_users_opposite_gender = $conn->query($sql_users_opposite_gender);
 
@@ -68,11 +68,14 @@ $result_users_opposite_gender = $conn->query($sql_users_opposite_gender);
                                 <p class="card-text">Age: <?php echo $row['age']; ?></p>
                                 <p class="card-text"><?php echo $row['bio']; ?></p>
                                 <div class="text-center">
-                                    <form action="send_friend_request.php" method="post">
+                                    <form action="match/send_friend_request.php" method="post">
                                         <input type="hidden" name="receiver_id" value="<?php echo $row['id']; ?>">
                                         <button type="submit" class="btn btn-primary mr-2"><i class="fa fa-check" aria-hidden="true"></i> Like</button>
                                     </form>
-                                    <button class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Dislike</button>
+                                    <form action="match/block_user.php" method="post"> <!-- Change action to block_user.php -->
+                                        <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" name="block" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Dislike</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
